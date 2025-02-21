@@ -25,6 +25,12 @@ static bool OpenAICommandScript::HandleAskAICommand(ChatHandler* handler, const 
     if (!*args)
         return false;
 
+    if(OPENAI_API_KEY.empty())
+    {
+        handler->PSendSysMessage("OpenAI API key is not set.");
+        return false;
+    }
+
     std::string prompt = "Provide a guide or answer for World of Warcraft WotLK 3.3.5a: ";
     prompt += args;
 
