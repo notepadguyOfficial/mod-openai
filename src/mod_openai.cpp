@@ -2,19 +2,24 @@
 #include <curl/curl.h>
 #include <json/json.h>
 
-std::vector<ChatCommand> OpenAICommandScript::GetCommands()
+ChatCommandTable OpenAICommandScript::GetCommands()
 {
-    static std::vector<ChatCommand> commandTable =
+    static ChatCommandTable child =
     {
-        { "ask", SEC_PLAYER, false, &HandleAskAICommand, "" }
+        { "ask", HandleAskAICommand, SEC_PLAYER, Console::Yes }
     };
 
-    return commandTable;
+    static ChatCommandTable parent =
+    {
+        { "openai", child }
+    };
+
+    return parent;
 }
 
 static bool OpenAICommandScript::HandleAskAICommand(ChatHandler* handler, const char* args)
 {
-    if(sConfigMgr->GetOption<bool>("OpenAI.Enable", false))
+    if(!sConfigMgr->GetOption<bool>("OpenAI.Enable", true))
         return false;
 
     if (!*args)
@@ -27,6 +32,7 @@ static bool OpenAICommandScript::HandleAskAICommand(ChatHandler* handler, const 
 
     Json::Value jsonResponse;
     Json::Reader reader;
+
     if (reader.parse(response, jsonResponse) && jsonResponse.isMember("choices"))
     {
         std::string aiResponse = jsonResponse["choices"][0]["message"]["content"].asString();

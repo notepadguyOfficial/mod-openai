@@ -4,6 +4,8 @@
 #include "Log.h"
 #include "Chat.h"
 
+using namespace Acore::ChatCommands;
+
 class OpenAICommandScript : public CommandScript
 {
 public:
@@ -12,7 +14,7 @@ public:
 
     OpenAICommandScript() : CommandScript("OpenAICommandScript")
     {
-        if(!sConfigMgr->GetOption<bool>("OpenAI.Enable", false))
+        if(sConfigMgr->GetOption<bool>("OpenAI.Enable", true))
         {
             LOG_DEBUG("Server", "OpenAI is enabled.");
             OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
@@ -25,7 +27,7 @@ public:
             LOG_DEBUG("Server", "OpenAI is disabled.");
     }
 
-    std::vector<ChatCommand> GetCommands() const override;
+    ChatCommandTable GetCommands() const override;
 
 private:
     std::string MakeOpenAIRequest(const std::string& prompt);
