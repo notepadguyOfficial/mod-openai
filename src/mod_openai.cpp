@@ -69,6 +69,7 @@ std::string OpenAICommandScript::MakeOpenAIRequest(const std::string& prompt)
     CURLcode res = curl_easy_perform(curl);
     if (res != CURLE_OK) {
         response = "Failed to communicate with OpenAI API.";
+        LOGS_ERROR("Server", "Failed to communicate with OpenAI API. Error: %s", curl_easy_strerror(res));
     }
 
     curl_easy_cleanup(curl);
