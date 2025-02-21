@@ -57,7 +57,7 @@ std::string OpenAICommandScript::MakeOpenAIRequest(const std::string& prompt)
     headers = curl_slist_append(headers, ("Authorization: Bearer " + OPENAI_API_KEY).c_str());
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
-    std::string requestBody = R"({"model": "gpt-3.5-turbo", "messages": [{"role": "user", "content": ")" + prompt + R"("}]})";
+    std::string requestBody = R"({"model": "gpt-4o-mini", "messages": [{"role": "user", "content": ")" + prompt + R"("}]})";
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, requestBody.c_str());
 
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, [](void* ptr, size_t size, size_t nmemb, std::string* data) {
