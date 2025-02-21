@@ -18,9 +18,9 @@ public:
         {
             LOG_DEBUG("Server", "OpenAI is enabled.");
             OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
-            OPENAI_API_KEY = sConfigMgr->GetStringDefault("AskOpenAI.APIKey", "");
+            OPENAI_API_KEY = sConfigMgr->GetOption<std::string>("AskOpenAI.APIKey", "");
 
-            if(!OPENAI_API_KEY)
+            if(OPENAI_API_KEY.empty())
                 LOG_ERROR("Server", "OpenAI API key is not set. Please set it in the configuration file.");
         }
         else
