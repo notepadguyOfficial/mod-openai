@@ -1,0 +1,19 @@
+#
+# Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
+#
+
+[worldserver]
+
+########################################
+# Open AI Configuration
+########################################
+#
+#    AskOpenAI.Enabled
+#        Description: (Default: 1) Enable or Disable Module. This module ask OpenAI things regarding WOW Wotlk, be it guides, gearing, and more ..
+#        Default:     0 - Disabled
+#                     1 - Enabled
+#
+
+AskOpenAI.Enabled = 1
+
+AskOpenAI.APIKey = "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"
