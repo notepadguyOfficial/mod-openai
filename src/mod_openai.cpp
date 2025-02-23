@@ -15,7 +15,7 @@ ChatCommandTable OpenAICommandScript::GetCommands()
     return parent;
 }
 
-static bool OpenAICommandScript::HandleAskAICommand(ChatHandler* handler, const char* args)
+bool OpenAICommandScript::HandleAskAICommand(ChatHandler* handler, const char* args)
 {
     if (sConfigMgr->GetOption<bool>("OpenAI.Enable", false))
         return false;
