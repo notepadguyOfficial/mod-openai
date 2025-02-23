@@ -1,20 +1,23 @@
 #include "mod_openai.h"
-#include <curl/curl.h>
-#include <json/json.h>
 
 std::vector<ChatCommand> OpenAICommandScript::GetCommands()
 {
-    static std::vector<ChatCommand> commandTable =
+    static ChatCommandTable child =
     {
-        { "ask", SEC_PLAYER, false, &HandleAskAICommand, "" }
+        { "ask", HandleAskAICommand, SEC_PLAYER, Console::Yes }
     };
 
-    return commandTable;
+    static ChatCommandTable parent =
+    {
+        { "openai", child }
+    };
+
+    return parent;
 }
 
 static bool OpenAICommandScript::HandleAskAICommand(ChatHandler* handler, const char* args)
 {
-    if (sConfigMgr->GetOption<bool>("OpenAI.Enabled", false))
+    if (sConfigMgr->GetOption<bool>("OpenAI.Enable", false))
         return false;
 
     if (!*args)
@@ -25,13 +28,10 @@ static bool OpenAICommandScript::HandleAskAICommand(ChatHandler* handler, const 
 
     std::string response = MakeOpenAIRequest(prompt);
 
-    std::istringstream jsonStream(response);
-    boost::property_tree::ptree jsonResponse;
-    boost::property_tree::read_json(jsonStream, jsonResponse);
-
-    if (auto choice = jsonResponse.get_child_optional("choices"))
+    json::value jsonResponse = json::parse(response);
+    if (jsonResponse.as_object().contains("choices"))
     {
-        std::string aiResponse = choice->front().second.get<std::string>("message.content", "");
+        std::string aiResponse = jsonResponse.as_object()["choices"].as_array()[0].as_object()["message"].as_object()["content"].as_string().c_str();
         handler->PSendSysMessage("AI Response: %s", aiResponse.c_str());
     }
     else
@@ -73,6 +73,6 @@ std::string OpenAICommandScript::MakeOpenAIRequest(const std::string& prompt)
     }
     catch (const std::exception& e)
     {
-        return std::string("Error: ") + e.what();
+        LOG_ERROR("server.worldserver", "[OpenAICommandScript] Error making OpenAI request: %s", e.what());
     }
 }
