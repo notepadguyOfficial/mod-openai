@@ -14,7 +14,7 @@ std::vector<ChatCommand> OpenAICommandScript::GetCommands()
 
 static bool OpenAICommandScript::HandleAskAICommand(ChatHandler* handler, const char* args)
 {
-    if(sConfigMgr->GetOption<bool>("OpenAI.Enable", false))
+    if (sConfigMgr->GetOption<bool>("OpenAI.Enable", false))
         return false;
 
     if (!*args)
@@ -25,11 +25,13 @@ static bool OpenAICommandScript::HandleAskAICommand(ChatHandler* handler, const 
 
     std::string response = MakeOpenAIRequest(prompt);
 
-    Json::Value jsonResponse;
-    Json::Reader reader;
-    if (reader.parse(response, jsonResponse) && jsonResponse.isMember("choices"))
+    std::istringstream jsonStream(response);
+    boost::property_tree::ptree jsonResponse;
+    boost::property_tree::read_json(jsonStream, jsonResponse);
+
+    if (auto choice = jsonResponse.get_child_optional("choices"))
     {
-        std::string aiResponse = jsonResponse["choices"][0]["message"]["content"].asString();
+        std::string aiResponse = choice->front().second.get<std::string>("message.content", "");
         handler->PSendSysMessage("AI Response: %s", aiResponse.c_str());
     }
     else
@@ -42,37 +44,35 @@ static bool OpenAICommandScript::HandleAskAICommand(ChatHandler* handler, const 
 
 std::string OpenAICommandScript::MakeOpenAIRequest(const std::string& prompt)
 {
-    CURL* curl = curl_easy_init();
-    if (!curl) return "Failed to initialize CURL.";
+    try {
+        net::io_context ioc;
+        tcp::resolver resolver(ioc);
+        beast::tcp_stream stream(ioc);
 
-    std::string response;
+        auto const results = resolver.resolve("api.openai.com", "https");
+        stream.connect(results);
 
-    // Set up the request
-    curl_easy_setopt(curl, CURLOPT_URL, OPENAI_API_URL.c_str());
-    curl_easy_setopt(curl, CURLOPT_POST, 1L);
+        std::ostringstream requestBody;
+        requestBody << "{\"model\": \"gpt-3.5-turbo\", \"messages\": [{\"role\": \"user\", \"content\": \"" << prompt << "\"}]}";
 
-    // Set headers
-    struct curl_slist* headers = nullptr;
-    headers = curl_slist_append(headers, "Content-Type: application/json");
-    headers = curl_slist_append(headers, ("Authorization: Bearer " + OPENAI_API_KEY).c_str());
-    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+        http::request<http::string_body> req{http::verb::post, "/v1/chat/completions", 11};
+        req.set(http::field::host, "api.openai.com");
+        req.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
+        req.set(http::field::content_type, "application/json");
+        req.set("Authorization", "Bearer " + OPENAI_API_KEY);
+        req.body() = requestBody.str();
+        req.prepare_payload();
 
-    std::string requestBody = R"({"model": "gpt-3.5-turbo", "messages": [{"role": "user", "content": ")" + prompt + R"("}]})";
-    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, requestBody.c_str());
+        http::write(stream, req);
+        beast::flat_buffer buffer;
+        http::response<http::string_body> res;
+        http::read(stream, buffer, res);
 
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, [](void* ptr, size_t size, size_t nmemb, std::string* data) {
-        data->append((char*)ptr, size * nmemb);
-        return size * nmemb;
-    });
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
-
-    CURLcode res = curl_easy_perform(curl);
-    if (res != CURLE_OK) {
-        response = "Failed to communicate with OpenAI API.";
+        stream.socket().shutdown(tcp::socket::shutdown_both);
+        return res.body();
     }
-
-    curl_easy_cleanup(curl);
-    curl_slist_free_all(headers);
-
-    return response;
+    catch (const std::exception& e)
+    {
+        return std::string("Error: ") + e.what();
+    }
 }

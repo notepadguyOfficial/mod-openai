@@ -2,6 +2,18 @@
 #include "Config.h"
 #include "Player.h"
 #include "Chat.h"
+#include <boost/beast/core.hpp>
+#include <boost/beast/http.hpp>
+#include <boost/beast/version.hpp>
+#include <boost/asio/connect.hpp>
+#include <boost/asio/ip/tcp.hpp>
+#include <boost/property_tree/json_parser.hpp>
+#include <sstream>
+
+namespace beast = boost::beast;
+namespace http = beast::http;
+namespace net = boost::asio;
+using tcp = net::ip::tcp;
 
 class OpenAICommandScript : public CommandScript
 {
