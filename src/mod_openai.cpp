@@ -1,6 +1,6 @@
 #include "mod_openai.h"
 
-std::vector<ChatCommand> OpenAICommandScript::GetCommands()
+ChatCommandTable OpenAICommandScript::GetCommands()
 {
     static ChatCommandTable child =
     {

@@ -17,6 +17,8 @@ namespace net = boost::asio;
 using tcp = net::ip::tcp;
 namespace json = boost::json;
 
+using namespace Acore::ChatCommands;
+
 class OpenAICommandScript : public CommandScript
 {
 public:
@@ -32,7 +34,7 @@ public:
         }
     }
 
-    std::vector<ChatCommand> GetCommands() const override;
+    ChatCommandTable GetCommands() const override;
 
 private:
     std::string MakeOpenAIRequest(const std::string& prompt);
