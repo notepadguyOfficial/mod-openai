@@ -1,21 +1,34 @@
 # ![logo](https://raw.githubusercontent.com/azerothcore/azerothcore.github.io/master/images/logo-github.png) AzerothCore
 
+<<<<<<< HEAD
 # Junk to Gold
 This module will automatically sell gray items when the player loots them
+=======
+# OpenAI
+>>>>>>> 823bc3eb01c63388ea79dd8defb5f9269808e8b7
 
 ```
 [worldserver]
 
 ########################################
+<<<<<<< HEAD
 # Junk To Gold configuration
 ########################################
 #
 #    JunkToGold.Enable
 #        Description: (Default: 1) Enable or Disable Module
+=======
+# Open AI Configuration
+########################################
+#
+#    AskOpenAI.Enabled
+#        Description: (Default: 1) Enable or Disable Module. This module ask OpenAI things regarding WOW Wotlk, be it guides, gearing, and more ..
+>>>>>>> 823bc3eb01c63388ea79dd8defb5f9269808e8b7
 #        Default:     0 - Disabled
 #                     1 - Enabled
 #
 
+<<<<<<< HEAD
 JunkToGold.Enable = 1
 
 ########################################
@@ -82,3 +95,9 @@ Logger.junktogold=5,Console JunkToGold
 ## Credits
 
 - noisiver [Author of the idea and part of the initial code.](https://github.com/noisiver/mod-junk-to-gold)
+=======
+AskOpenAI.Enabled = 1
+
+AskOpenAI.APIKey = "your-chatgpt-api-key"
+```
+>>>>>>> 823bc3eb01c63388ea79dd8defb5f9269808e8b7

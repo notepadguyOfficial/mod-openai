@@ -23,8 +23,11 @@ public:
 
     OpenAICommandScript() : CommandScript("OpenAICommandScript")
     {
-        OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
-        OPENAI_API_KEY = sConfigMgr->GetStringDefault("AskOpenAI.APIKey", "");
+        if (sConfigMgr->GetOption<bool>("OpenAI.Enabled", false))
+        {
+            OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
+            OPENAI_API_KEY = sConfigMgr->GetStringDefault("AskOpenAI.APIKey", "");
+        }
     }
 
     std::vector<ChatCommand> GetCommands() const override;

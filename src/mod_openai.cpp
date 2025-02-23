@@ -14,7 +14,7 @@ std::vector<ChatCommand> OpenAICommandScript::GetCommands()
 
 static bool OpenAICommandScript::HandleAskAICommand(ChatHandler* handler, const char* args)
 {
-    if (sConfigMgr->GetOption<bool>("OpenAI.Enable", false))
+    if (sConfigMgr->GetOption<bool>("OpenAI.Enabled", false))
         return false;
 
     if (!*args)
