@@ -30,7 +30,7 @@ public:
         if (sConfigMgr->GetOption<bool>("OpenAI.Enabled", false))
         {
             OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
-            OPENAI_API_KEY = sConfigMgr->GetStringDefault("AskOpenAI.APIKey", "");
+            OPENAI_API_KEY = sConfigMgr->GetOption<std::string>("AskOpenAI.APIKey", "");
         }
     }
 

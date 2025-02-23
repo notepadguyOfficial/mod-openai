@@ -23,6 +23,9 @@ static bool OpenAICommandScript::HandleAskAICommand(ChatHandler* handler, const 
     if (!*args)
         return false;
 
+    Player* player = handler->GetPlayer();
+    std::string playerName = player ? player->GetName() : "Unknown";
+
     std::string prompt = "Provide a guide or answer for World of Warcraft WotLK 3.3.5a: ";
     prompt += args;
 
@@ -33,10 +36,13 @@ static bool OpenAICommandScript::HandleAskAICommand(ChatHandler* handler, const 
     {
         std::string aiResponse = jsonResponse.as_object()["choices"].as_array()[0].as_object()["message"].as_object()["content"].as_string().c_str();
         handler->PSendSysMessage("AI Response: %s", aiResponse.c_str());
+        LOG_INFO("server.worldserver", "[OpenAICommandScript] %s asked AI: %s", playerName.c_str(), args);
+        LOG_INFO("server.worldserver", "[OpenAICommandScript] AI Response: %s", aiResponse.c_str());
     }
     else
     {
         handler->PSendSysMessage("Failed to get a valid response from OpenAI.");
+        LOG_ERROR("server.worldserver", "[OpenAICommandScript] Failed to get a valid response from OpenAI.");
     }
 
     return true;
