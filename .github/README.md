@@ -6,16 +6,14 @@
 [worldserver]
 
 ########################################
-# Open AI Configuration
+# Phi2 Model Configuration
 ########################################
 #
-#    AskOpenAI.Enabled
-#        Description: (Default: 1) Enable or Disable Module. This module ask OpenAI things regarding WOW Wotlk, be it guides, gearing, and more ..
+#    Phi2Model.Enabled
+#        Description: (Default: 1) Enable or Disable Module. This module ask Phi2Model things regarding WOW Wotlk, be it guides, gearing, and more ..
 #        Default:     0 - Disabled
 #                     1 - Enabled
 #
 
-AskOpenAI.Enabled = 1
-
-AskOpenAI.APIKey = ""
+Phi2Model.Enabled = 1
 ```

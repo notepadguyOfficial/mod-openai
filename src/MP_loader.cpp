@@ -16,10 +16,10 @@
  */
 
 // From SC
-void AddSC_OpenAICommandScript();
+void AddSC_Phi2ModelommandScript();
 
 // Add all
 void Addskeleton_moduleScripts()
 {
-    AddSC_OpenAICommandScript();
+    AddSC_Phi2ModelommandScript();
 }

@@ -19,29 +19,19 @@ namespace json = boost::json;
 
 using namespace Acore::ChatCommands;
 
-class OpenAICommandScript : public CommandScript
+class Phi2ModelCommandScript : public CommandScript
 {
 public:
-    static std::string OPENAI_API_URL;
-    static std::string OPENAI_API_KEY;
-
-    OpenAICommandScript() : CommandScript("OpenAICommandScript")
-    {
-        if (sConfigMgr->GetOption<bool>("OpenAI.Enabled", false))
-        {
-            OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
-            OPENAI_API_KEY = sConfigMgr->GetOption<std::string>("AskOpenAI.APIKey", "");
-        }
-    }
+    Phi2ModelCommandScript() : CommandScript("Phi2ModelCommandScript") { }
 
     ChatCommandTable GetCommands() const override;
 
 private:
-    static std::string MakeOpenAIRequest(const std::string& prompt);
-    static bool HandleAskAICommand(ChatHandler* handler, const char* args);
+    static std::string MakePhi2ModelRequest(const std::string& prompt);
+    static bool HandleAskPhi2Model(ChatHandler* handler, const char* args);
 };
 
-void AddSC_OpenAICommandScript()
+void AddSC_Phi2ModelommandScript()
 {
-    new OpenAICommandScript();
+    new Phi2ModelCommandScript();
 }
