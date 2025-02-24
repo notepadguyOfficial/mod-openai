@@ -27,8 +27,8 @@ public:
     ChatCommandTable GetCommands() const override;
 
 private:
-    static std::string MakePhi2ModelRequest(const std::string& prompt);
     static bool HandleAskPhi2Model(ChatHandler* handler, const char* args);
+    static std::string MakePhi2ModelRequest(const std::string& prompt);
 };
 
 void AddSC_Phi2ModelommandScript()
