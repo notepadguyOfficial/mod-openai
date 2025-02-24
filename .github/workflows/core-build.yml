@@ -2,7 +2,7 @@ name: core-build
 on:
   push:
     branches:
-      - 'master'
+      - 'phi-2'
   pull_request:
 
 jobs:
