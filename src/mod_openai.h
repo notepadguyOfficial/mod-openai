@@ -22,8 +22,8 @@ using namespace Acore::ChatCommands;
 class OpenAICommandScript : public CommandScript
 {
 public:
-    std::string OPENAI_API_URL;
-    std::string OPENAI_API_KEY;
+    static std::string OPENAI_API_URL;
+    static std::string OPENAI_API_KEY;
 
     OpenAICommandScript() : CommandScript("OpenAICommandScript")
     {
