@@ -1,6 +1,6 @@
 #include "mod_openai.h"
 
-ChatCommandTable OpenAICommandScript::GetCommands() const
+ChatCommandTable Phi2ModelCommandScript::GetCommands() const
 {
     static ChatCommandTable child =
     {
@@ -15,7 +15,7 @@ ChatCommandTable OpenAICommandScript::GetCommands() const
     return parent;
 }
 
-bool OpenAICommandScript::HandleAskPhi2Model(ChatHandler* handler, const char* args)
+bool Phi2ModelCommandScript::HandleAskPhi2Model(ChatHandler* handler, const char* args)
 {
     if (sConfigMgr->GetOption<bool>("Phi2Model.Enable", false))
         return false;
@@ -27,7 +27,7 @@ bool OpenAICommandScript::HandleAskPhi2Model(ChatHandler* handler, const char* a
     std::string playerName = player ? player->GetName() : "Unknown";
     std::string prompt = "Provide a guide or answer for World of Warcraft WotLK 3.3.5a: " + args;
 
-    std::string response = OpenAICommandScript::AskPhi2Model(prompt);
+    std::string response = AskPhi2Model(prompt);
     handler->PSendSysMessage("AI Response: %s", response.c_str());
 
     LOG_INFO("server.worldserver", "[OpenAICommandScript] Player: %s, Prompt: %s, Response: %s", playerName.c_str(), prompt.c_str(), response.c_str());
@@ -35,7 +35,7 @@ bool OpenAICommandScript::HandleAskPhi2Model(ChatHandler* handler, const char* a
     return true;
 }
 
-std::string OpenAICommandScript::MakePhi2ModelRequest(const std::string& prompt)
+std::string Phi2ModelCommandScript::MakePhi2ModelRequest(const std::string& prompt)
 {
     try {
         net::io_context ioc;
