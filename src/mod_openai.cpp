@@ -32,6 +32,7 @@ bool OpenAICommandScript::HandleAskAICommand(ChatHandler* handler, const char* a
     std::string response = MakeOpenAIRequest(prompt);
 
     json::value jsonResponse = json::parse(response);
+
     if (jsonResponse.as_object().contains("choices"))
     {
         std::string aiResponse = jsonResponse.as_object()["choices"].as_array()[0].as_object()["message"].as_object()["content"].as_string().c_str();
@@ -80,5 +81,6 @@ std::string OpenAICommandScript::MakeOpenAIRequest(const std::string& prompt)
     catch (const std::exception& e)
     {
         LOG_ERROR("server.worldserver", "[OpenAICommandScript] Error making OpenAI request: %s", e.what());
+        return "";
     }
 }
