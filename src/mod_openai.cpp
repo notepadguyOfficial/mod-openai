@@ -73,5 +73,6 @@ std::string Phi2ModelCommandScript::MakePhi2ModelRequest(const std::string& prom
     catch (const std::exception& e)
     {
         LOG_ERROR("server.worldserver", "[OpenAICommandScript] Error making OpenAI request: %s", e.what());
+        return "";
     }
 }
