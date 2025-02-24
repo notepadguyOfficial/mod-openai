@@ -37,7 +37,7 @@ public:
     ChatCommandTable GetCommands() const override;
 
 private:
-    std::string MakeOpenAIRequest(const std::string& prompt);
+    static std::string MakeOpenAIRequest(const std::string& prompt);
     static bool HandleAskAICommand(ChatHandler* handler, const char* args);
 };
 
