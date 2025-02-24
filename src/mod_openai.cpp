@@ -25,7 +25,8 @@ bool Phi2ModelCommandScript::HandleAskPhi2Model(ChatHandler* handler, const char
 
     Player* player = handler->GetPlayer();
     std::string playerName = player ? player->GetName() : "Unknown";
-    std::string prompt = "Provide a guide or answer for World of Warcraft WotLK 3.3.5a: " + args;
+    std::string prompt = "Provide a guide or answer for World of Warcraft WotLK 3.3.5a: ";
+    prompt += args;
 
     std::string response = AskPhi2Model(prompt);
     handler->PSendSysMessage("AI Response: %s", response.c_str());
